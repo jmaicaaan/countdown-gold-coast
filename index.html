@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="stopwatch-mode">
+<head lang="en">
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<title>Countdown timer</title>
+
+	<link type="text/css" rel="stylesheet" href="assets/materialize/css/materialize.min.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div class="wrapper">
+	<div class="app">
+		<div class="container alarm hidden">
+
+			<div class="clock z-depth-1 inactive">
+				<span>Not Set</span>
+				<div class="overlay waves-effect"></div>
+			</div>
+		</div>
+
+		<div class="container stopwatch">
+
+			<div class="clock inactive z-depth-1 timer">
+				<div class="header-container">
+					<span class="title">Countdown to Gold Coast 2018 XX1 Commonwealth Games</span>
+					<div class="logo-container">
+						<img class="logo" src="assets/images/logo.jpg">
+					</div>
+				</div>
+				
+				<span class="timer-display">0:00:00.0</span>
+				<!-- <div class="overlay waves-effect"></div> -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="assets/materialize/js/materialize.min.js"></script>
+<script src="assets/js/timer.js"></script>
+
+</body>
+</html>
