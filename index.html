@@ -7,8 +7,289 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<title>Countdown timer</title>
 
-	<link type="text/css" rel="stylesheet" href="assets/materialize/css/materialize.min.css">
-	<link type="text/css" rel="stylesheet" href="assets/css/styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+	<style>
+		*{
+			margin:0;
+			padding:0;
+			box-sizing: border-box;
+		}
+
+		html{
+			text-align: center;
+			background-color:#EFEFEF;
+
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		.wrapper{
+			width: 100vw;
+			min-height: 100vh;
+			overflow-x: hidden;
+		}
+
+		.app {
+			width: 300vw;
+
+			transition: 0.4s;
+		}
+
+
+		/*-----------------------
+			Modes
+		-----------------------*/
+
+		.switch-clocks{
+			transition:background-color 0.4s;
+			cursor:default;
+		}
+
+		html.alarm-mode .switch-clocks{
+			background-color: #E91E63;
+		}
+
+		html.alarm-mode header .alarm,
+		html.stopwatch-mode header .stopwatch,
+		html.timer-mode header .timer{
+			background-color:rgba(255,255,255,0.2);
+			pointer-events:none;
+		}
+
+		html.stopwatch-mode .switch-clocks{
+			background-color: #607D8B;
+		}
+
+		html.timer-mode .switch-clocks{
+			background-color: #00ACC1;
+		}
+
+		.switch-clocks a{
+			color:#fff;
+			padding:30px 40px;
+		}
+
+		html.alarm-mode .app{
+			transform: translate(0);
+			-webkit-transform: translate(0);
+		}
+
+		html.stopwatch-mode .app{
+			transform: translate(-100vw);
+			-webkit-transform: translate(-100vw);
+		}
+
+		html.timer-mode .app{
+			transform: translate(-200vw);
+			-webkit-transform: translate(-200vw);
+		}
+
+
+		/*-----------------------
+			Clocks General
+		-----------------------*/
+
+		.container {
+			position: relative;
+			float: left;
+			width: 100vw;
+			max-width: none; /* canceling auto styles from materialize.css */
+		}
+
+		form{
+			width: 100%;
+			height: 85px;
+			padding: 10px;
+			margin: 50px auto;
+			color: #0277BD;
+			border-radius: 2px;
+
+		}
+
+		form a{
+			margin: 0 5px;
+		}
+
+		.control{
+			display: inline-block;
+			width: 130px;
+			vertical-align: middle;
+		}
+
+		.input-field{
+			display: inline-block;
+			padding-right: 20px;
+		}
+
+		.checkbox{
+			padding-left: 20px;
+		}
+
+		.clock {
+			position: relative;
+			height: 300px;
+			max-width: 700px;
+			width: 100%;
+			display: block;
+			margin: 50px auto;
+
+			font-size: 100px;
+			color: #0277BD;
+			text-align: center;
+			/* line-height: 300px; */
+
+			background-color: #fff;
+			border-radius: 2px;
+
+			transition: all 0.4s ease-in, box-shadow 0.2s;
+		}
+
+		.clock.inactive {
+			/* color: #9e9e9e; */
+			color: #2c3e50;
+		}
+
+		.clock .overlay{
+			position: absolute;
+			top:0;
+			left:0;
+			width: 100%;
+			height: 100%;
+		}
+
+		.timer {
+			display: grid;
+			grid-template-rows: 0.5fr 1fr;
+		}
+
+		.header-container {
+			display: grid;
+			grid-template-columns: 1fr 0.5fr;
+		}
+
+		.title {
+			font-size: 20px;
+			align-self: center;
+		}
+
+		.logo-container {
+			height: 80px;
+			width: 350px;
+		}
+		.logo {
+			/* background-image: url('../images/logo.jpg'); */
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+
+		.switch label .lever:after{
+			background-color:#fff;
+		}
+
+
+		/*-----------------------
+			Alarm
+		-----------------------*/
+
+		#alarm-input {
+			font-size: 26px;
+			text-align: center;
+		}
+
+		.switch{
+			display: inline-block;
+		}
+
+		/*-----------------------
+			Stopwatch
+		-----------------------*/
+
+		.stopwatch form {
+			padding: 0;
+			/* line-height: 85px; */
+		}
+
+		.stopwatch form a{
+			color: #0059bc;
+			margin-bottom: 0;
+		}
+
+		.stopwatch .clock{
+			max-width: 800px;
+		}
+
+		/*-----------------------
+			Timer
+		-----------------------*/
+
+		#timer-input {
+			font-size: 32px;
+			text-align: center;
+		}
+
+		.timer-btn{
+			font-size: 32px;
+			cursor: pointer;
+		}
+
+		/*-----------------------
+			Modals
+		-----------------------*/
+
+		.modal{
+			width: 40%;
+		}
+
+		.dismiss-alarm-sounds{
+			float:none !important;
+		}
+
+		/*-----------------------
+			Responsiveness
+		-----------------------*/
+
+		@media (max-width: 800px){
+
+			.switch-clocks a{
+				padding: 20px;
+			}
+
+			form{
+				height: auto;
+				padding: 10px;
+				margin: 10px auto;
+			}
+
+			.checkbox{
+				padding-left: 0;
+				display: none;
+			}
+
+			.title {
+				font-size: 13px;
+			}
+
+			.clock{
+				font-size: 60px;
+				height: 180px;
+				/* line-height: 180px; */
+				margin-top:20px;
+			}
+
+			.stopwatch form a{
+				padding: 0 1rem;
+			}
+
+			.modal{
+				width: 80%;
+			}
+
+		}
+
+
+	</style>
 	<base href="/">
 </head>
 <body>
@@ -29,7 +310,7 @@
 				<div class="header-container">
 					<span class="title">Countdown to Gold Coast 2018 XX1 Commonwealth Games</span>
 					<div class="logo-container">
-						<img class="logo" src="assets/images/logo.jpg">
+						<img class="logo" src="https://raw.githubusercontent.com/jmaicaaan/countdown-gold-coast/master/assets/images/logo.jpg">
 					</div>
 				</div>
 				
@@ -41,8 +322,41 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="assets/materialize/js/materialize.min.js"></script>
-<script src="assets/js/timer.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script type="text/javascript">
+	(function() {
+			var countDownDate = new Date("April 4, 2018 00:00:00").getTime();
+			var element = $('.timer-display');
+			
+			// Update the count down every 1 second
+			var x = setInterval(function() {
+			
+					// Get todays date and time
+					var now = new Date().getTime();
+					
+					// Find the distance between now an the count down date
+					var distance = countDownDate - now;
+					
+					// Time calculations for days, hours, minutes and seconds
+					var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+					var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+					var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+					var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+					
+					// Output the result in an element with id="demo"
+					
+					var text = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+					element.html(text);
+					
+					
+					// If the count down is over, write some text 
+					if (distance < 0) {
+							clearInterval(x);
+							element.html("EXPIRED");
+					}
+			}, 1000);
+	})();
+</script>
 
 </body>
 </html>
